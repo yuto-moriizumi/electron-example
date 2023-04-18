@@ -1,9 +1,12 @@
 import { useState } from "react";
+import { ObjType } from "./preload";
 
 type Todo = {
   title: string;
   content: string;
 };
+
+declare const versions: ObjType;
 
 function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -16,6 +19,16 @@ function App() {
   };
   const deleteTodo = (index: number) => {
     setTodos(todos.filter((t, i) => i != index));
+  };
+  const save = async () => {
+    console.log(
+      `This app is using Chrome (v${versions.chrome()}), Node.js (v${versions.node()}), and Electron (v${versions.electron()})`
+    );
+
+    const response = await versions.ping();
+    console.log(response); // 'pong' と出力
+
+    await versions.save(JSON.stringify({ test: "hello" }));
   };
 
   return (
@@ -48,6 +61,7 @@ function App() {
           />
         </div>
         <button onClick={addTodo}>追加</button>
+        <button onClick={save}>保存</button>
       </div>
     </>
   );
