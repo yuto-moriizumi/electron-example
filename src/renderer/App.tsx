@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { ObjType } from "./preload";
+import { Api } from "../main/preload";
 
 type Todo = {
   title: string;
   content: string;
 };
 
-declare const versions: ObjType;
+declare const api: Api;
 
 function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -21,28 +21,31 @@ function App() {
     setTodos(todos.filter((t, i) => i != index));
   };
   const save = async () => {
-    console.log(
-      `This app is using Chrome (v${versions.chrome()}), Node.js (v${versions.node()}), and Electron (v${versions.electron()})`
-    );
-
-    const response = await versions.ping();
-    console.log(response); // 'pong' と出力
-
-    await versions.save(JSON.stringify({ test: "hello" }));
+    await api.save(JSON.stringify({ todos }));
   };
 
   return (
     <>
       <h1>Todo application</h1>
-      {todos.map((t, i) => (
-        <tr>
-          <td>{t.title}</td>
-          <td>{t.content}</td>
-          <td>
-            <button onClick={() => deleteTodo(i)}>削除</button>
-          </td>
-        </tr>
-      ))}
+      <table>
+        <thead>
+          <tr>
+            <th>タイトル</th>
+            <th>内容</th>
+          </tr>
+        </thead>
+        <tbody>
+          {todos.map((t, i) => (
+            <tr key={i}>
+              <td>{t.title}</td>
+              <td>{t.content}</td>
+              <td>
+                <button onClick={() => deleteTodo(i)}>削除</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
       <div>
         <div>
           <label htmlFor="">タイトル</label>

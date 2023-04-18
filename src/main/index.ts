@@ -21,8 +21,6 @@ const createWindow = (): void => {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     },
   });
-
-  ipcMain.handle("ping", () => "pong");
   ipcMain.handle("save", async (event, data: string) => {
     let saveFilePath = "./output.json";
 
